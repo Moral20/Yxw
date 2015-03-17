@@ -69,6 +69,11 @@ SlashCmdList["BAF"] = function(msg, editBox)
     end
 end
 
+SLASH_RL1 = "/rl"
+SlashCmdList["RL"] = function(msg, editBox)
+    ReloadUI()
+end
+
 
 events:SetScript("OnEvent", function(self, event, ...) return self[event](self, ...) end)
 events:RegisterEvent("ADDON_LOADED")

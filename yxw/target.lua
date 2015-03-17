@@ -59,7 +59,7 @@ function getString(unit, hp)
 end
 
 
-local healthUpdate = function(frame, _, unit)
+local healthUpdate = function(frame, event, unit)
     unit = unit or frame.unit
     local hp = UnitHealth(unit)
 
