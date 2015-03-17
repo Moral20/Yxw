@@ -1,4 +1,6 @@
 
+local addon, ns = ...
+
 -- 自动售卖灰色垃圾
 local f = CreateFrame("Frame")
 f:SetScript("OnEvent", function()

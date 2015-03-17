@@ -5,9 +5,11 @@
 ## Notes: 杂七杂八的插件
 ## Author: Moral
 
+config.lua
 target.lua
 arena.lua
 item.lua
 debug.lua
 totem.lua
 autohid.lua
+

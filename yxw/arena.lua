@@ -1,4 +1,5 @@
 -- 竞技场框体旁边显示徽章时间
+local addon, ns = ...
 local trinkets = {}
 local events = CreateFrame("Frame")
 

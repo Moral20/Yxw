@@ -1,20 +1,28 @@
 
 -- 脱离战斗,没有目标就隐藏自己
 
+local addon, ns = ...
+local cfg = ns.cfg
+
 local hid = ...
+
+local cfgPlayerPos = cfg.units.player.pos
+local cfgTargetPos = cfg.units.target.pos
+local scale = cfg.units.scale
 
 local autohid = function(self, event, ...)
     local unit = PlayerFrame.unit
     local unitplayer = PlayerFrame
-    local iscombat, ismaxhp, ismaxpower, havetarget = ...
+    local ismaxhp, ismaxpower, havetarget = ...
+    local isPlayerCombat = ...
 
-    iscombat = isCombat(event)
+    isPlayerCombat = isCombat(unit)
     ismaxhp = isMaxHp(unit)
     ismaxpower = isMaxPower(unit)
     havetarget = isTarget(TargetFrame.unit)
 
     if event == "PLAYER_ENTERING_WORLD" then
-        if (iscombat == false) and ismaxhp and ismaxpower then
+        if (isPlayerCombat == false) and ismaxhp and ismaxpower then
             hide(unitplayer)
             return
         else
@@ -23,7 +31,12 @@ local autohid = function(self, event, ...)
         end
     end
 
-    if havetarget or iscombat then
+    if havetarget then
+        show(unitplayer)
+        return
+    end 
+
+    if isPlayerCombat then
         show(unitplayer)
         return
     end 
@@ -35,21 +48,9 @@ local autohid = function(self, event, ...)
     end
 end
 
-hid = CreateFrame("Frame", "auto", PlayerFrame)
-hid:SetScript("OnEvent", autohid)
-hid:RegisterEvent("PLAYER_ENTERING_WORLD")
-hid:RegisterEvent("PLAYER_REGEN_DISABLED")
-hid:RegisterEvent("PLAYER_REGEN_ENABLED")
-hid:RegisterEvent("PLAYER_TARGET_CHANGED")
-hid:RegisterUnitEvent("UNIT_HEALTH", "player")
-hid:RegisterUnitEvent("UNIT_POWER", "player")
 
-function isCombat(event)
-    if event == "PLAYER_REGEN_DISABLED" then
-        return true
-    else
-        return false
-    end
+function isCombat(unit)
+    return UnitAffectingCombat(unit)
 end
 
 function isMaxHp(unit)
@@ -87,9 +88,32 @@ function isTarget(unit)
 end
 
 function hide(frame)
+    setpostion(frame)
     frame:SetAlpha(0.1)
 end
 
 function show(frame)
+    setpostion(frame)
+    settargetpostion(TargetFrame)
     frame:SetAlpha(1)
+end
+
+hid = CreateFrame("Frame", "auto", PlayerFrame)
+hid:SetScript("OnEvent", autohid)
+hid:RegisterEvent("PLAYER_ENTERING_WORLD")
+hid:RegisterEvent("PLAYER_TARGET_CHANGED")
+hid:RegisterUnitEvent("UNIT_HEALTH", "player")
+hid:RegisterUnitEvent("UNIT_POWER", "player")
+
+
+function setpostion(frame)
+    frame:ClearAllPoints()
+    frame:SetScale(scale)
+    frame:SetPoint(cfgPlayerPos.a1, cfgPlayerPos.af, cfgPlayerPos.a2, cfgPlayerPos.x, cfgPlayerPos.y)
+end
+
+function settargetpostion(frame)
+    frame:ClearAllPoints()
+    frame:SetScale(scale)
+    frame:SetPoint(cfgTargetPos.a1, cfgTargetPos.af, cfgTargetPos.a2, cfgTargetPos.x, cfgTargetPos.y)
 end
