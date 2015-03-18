@@ -24,18 +24,17 @@ local autohid = function(self, event, ...)
 
     if event == "PLAYER_ENTERING_WORLD" then
         setpostion(unitplayer)
+        settargetpostion(TargetFrame)
         if (isPlayerCombat == false) and ismaxhp and ismaxpower then
             hide(unitplayer)
             return
         else
-            settargetpostion(TargetFrame)
             show(unitplayer)
             return
         end
     end
 
     if havetarget then
-        settargetpostion(TargetFrame)
         show(unitplayer)
         return
     end 
@@ -111,6 +110,7 @@ hid:RegisterUnitEvent("UNIT_POWER", "player")
 function setpostion(frame)
     frame:ClearAllPoints()
     frame:SetScale(scale)
+    --PlayerFrame:PlayerFrameBackground:Hide()
     frame:SetPoint(cfgPlayerPos.a1, cfgPlayerPos.af, cfgPlayerPos.a2, cfgPlayerPos.x, cfgPlayerPos.y)
 end
 
