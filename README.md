@@ -1,5 +1,5 @@
 # Yxw
-some addons of wow
+这是个练习插件,停止更新
 ## Yxw
 
 ### Yxw.toc
