@@ -12,4 +12,7 @@ item.lua
 debug.lua
 totem.lua
 autohid.lua
+tooltip.lua
+focus.lua
+achivement.lua
 

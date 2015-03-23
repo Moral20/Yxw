@@ -66,16 +66,42 @@ function getString(unit, hp)
     return string
 end
 
+function getThreat(unit) 
+    local isTanking, status, threatpct, rawthreatpct, threatvalue = UnitDetailedThreatSituation("player", unit)
+--    if htreatpct == nil then
+--        debug("1231231")
+--        return ""
+--    else
+--        debgu(htreatpct)
+--        return htreatpct .. " "
+--    end
+    local txt = { "白 ",  "黄 ", "橙 ", "红 " }
+    if status == nil then
+        return ""
+    else
+        if status == 0 then
+            return txt[status+1]
+        elseif status == 1 then 
+            return txt[status+1]
+        elseif status == 2 then
+            return txt[status+1]
+        else
+            return txt[status+1]
+        end
+    end
+end
+
 
 local healthUpdate = function(frame, event, unit)
     unit = unit or frame.unit
     local hp = UnitHealth(unit)
 
+    local threatvalue = getThreat(unit)
     local string = getString(unit, hp)
 
     if hp > 0 then		
         local persent = hp / UnitHealthMax(unit) * 100
-        yxwAddon[unit]:SetFormattedText(string, persent)
+        yxwAddon[unit]:SetFormattedText(threatvalue .. string, persent)
     else
         yxwAddon[unit]:SetText(string)
     end

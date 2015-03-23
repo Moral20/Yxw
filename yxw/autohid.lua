@@ -9,6 +9,7 @@ local hid = ...
 local cfgPlayerPos = cfg.units.player.pos
 local cfgTargetPos = cfg.units.target.pos
 local scale = cfg.units.scale
+local hidAlpha = cfg.units.hid_alpha
 
 local autohid = function(self, event, ...)
     local unit = PlayerFrame.unit
@@ -22,16 +23,19 @@ local autohid = function(self, event, ...)
     havetarget = isTarget(TargetFrame.unit)
 
     if event == "PLAYER_ENTERING_WORLD" then
+        setpostion(unitplayer)
         if (isPlayerCombat == false) and ismaxhp and ismaxpower then
             hide(unitplayer)
             return
         else
+            settargetpostion(TargetFrame)
             show(unitplayer)
             return
         end
     end
 
     if havetarget then
+        settargetpostion(TargetFrame)
         show(unitplayer)
         return
     end 
@@ -88,18 +92,16 @@ function isTarget(unit)
 end
 
 function hide(frame)
-    setpostion(frame)
-    frame:SetAlpha(0.1)
+    frame:SetAlpha(hidAlpha)
 end
 
 function show(frame)
-    setpostion(frame)
-    settargetpostion(TargetFrame)
     frame:SetAlpha(1)
 end
 
 hid = CreateFrame("Frame", "auto", PlayerFrame)
 hid:SetScript("OnEvent", autohid)
+hid:SetScript("OnUpdate", autohid)
 hid:RegisterEvent("PLAYER_ENTERING_WORLD")
 hid:RegisterEvent("PLAYER_TARGET_CHANGED")
 hid:RegisterUnitEvent("UNIT_HEALTH", "player")

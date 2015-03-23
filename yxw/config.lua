@@ -6,6 +6,7 @@ ns.cfg = cfg
 
 cfg.units = {
     scale = 0.85,
+    hid_alpha = 0.1,
     -- PLAYER
     player = {
         pos = { a1 = "TOP", a2 = "TOP", af = "UIParent", x = -425, y = -285 },
