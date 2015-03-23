@@ -102,11 +102,18 @@ local healthUpdate = function(frame, event, unit)
     if hp > 0 then		
         local persent = hp / UnitHealthMax(unit) * 100
         yxwAddon[unit]:SetFormattedText(threatvalue .. string, persent)
+--        local yourTarget = TargetFrame.unit
+--        if unit == yourTarget then
+--            TargetFrameTextureFrameHealthBarText:SetText(hp)
+--            TargetFrameTextureFrameManaBarText:SetText(UnitPower(unit))
+--        end
     else
         yxwAddon[unit]:SetText(string)
     end
 end
 
+TargetFrameTextureFrameHealthBarText:SetAlpha(0.7)
+TargetFrameTextureFrameManaBarText:SetAlpha(0.7)
 
 yxwAddon.target = CreateFrame("Frame", "TargetPercent", TargetFrameHealthBar)
 yxwAddon.target:SetPoint("TOP", TargetFrame, "TOP", x, y)

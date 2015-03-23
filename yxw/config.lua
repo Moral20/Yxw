@@ -5,7 +5,7 @@ local cfg = {}
 ns.cfg = cfg
 
 cfg.units = {
-    scale = 0.85,
+    scale = 0.9,
     hid_alpha = 0.1,
     -- PLAYER
     player = {
@@ -17,3 +17,11 @@ cfg.units = {
     },
 }
 
+
+cfg.watch_spell = {
+    179244,
+    17,
+    33763,
+    2565,
+    156321,
+}
