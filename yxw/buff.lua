@@ -1,38 +1,15 @@
--- 修改图腾/恢复德鲁伊的蘑菇位置
+-- 定义玩家的某些技能BUFF,特别显示
 
 local addon, ns = ...
 local cfg = ns.cfg
 
 local buffs = ...
 
-local CellConfig = {
-    a1 = "CENTER", 
-    af = UIParent, 
-    a2 = "CENTER", 
-    x = 100, 
-    y = 0, 
-    alpha = 0.7,
-    cell_num = 10, 
-    offset = 20, 
-    width = 40, 
-    height = 40,
-}
+local CellConfig = cfg.CellConfig
 
-local Cells = {
-    key = nil,
-    frame = nil,
-    texture = nil,
-    cd_frame = nil,
-    frame_name = nil,
-    spell_id = nil,
-    spell_name = nil,
-    expires = nil,
-    used = nil,
-}
+local Cells = cfg.Cells
 
-local cd_frame = {}
-
-local CDFrame = {}
+CDFrame = {}
 
 --Create All Cells
 local function create_all_buff_cells(CC)
@@ -61,27 +38,22 @@ local function create_all_buff_cells(CC)
             expires = 0,
             used = 0,
         }
-        debug("create cell " .. i)
         table.insert(CDFrame, i, cell)
-        --CDFrame[i] = cell
-        --table.insert(CDFrame, cell)
     end
 end
 
+
 local function get_cell(spellid)
-    debug("1")
     local cell = nil
     for k, v in pairs(CDFrame) do
         if v.spell_id == spellid then
-            cell = v
-            return cell
+            return v
         end
     end
     if cell == nil then
         for k, v in pairs(CDFrame) do
             if v.used == 0 then
-                cell = v
-                return cell
+                return v
             end
         end
     end
@@ -89,133 +61,82 @@ local function get_cell(spellid)
 end
 
 local function set_cell(cell)
-    debug("2")
     for k, v in pairs(CDFrame) do
         if v.key == cell.key then
-            debug("set " .. v.key)
-            --table.insert(CDFrame, v.key, cell)
-            --CDFrame[key] = cell
+            CDFrame[v.key] = cell
         end
     end
 end
 
-local function init_cell(cell, spellid)
-    debug("3")
+
+local function buff_show(spellid, spellname, expires, icon)
     local cell = get_cell(spellid)
+    local now = GetTime()
     if cell == nil then
-        debug("init")
         return
     end
-    debug("key" .. cell.key)
+
     cell.spell_id = spellid
     cell.used = 1
-    set_cell(cell)
-end
-
-local function show(spellid, spellname, expires, icon)
-    debug("4")
-    local now = GetTime()
-    local cell = get_cell(spellid)
-    if cell == nil then
-        return
-    end
-    cell.spell_id = spellid
     cell.spell_name = spellname
     cell.expires = expires
     cell.texture:SetTexture(icon)
+    cell.cd_frame:SetCooldown(now, expires - now)
     cell.frame:Show()
-    cell.cd_frame:SetCooldown(now, cell.expires - now)
     set_cell(cell)
 end
 
-local function unshow(spellid)
-    debug("5")
+local function buff_hide(spellid)
     local cell = get_cell(spellid)
     if cell == nil then
         return
     end
     cell.frame:Hide()
     cell.used = 0
+    cell.spell_id = 0
+    cell.spell_name = "no name"
+    cell.expires = 0
     set_cell(cell)
 end
 
-local get_spell_id = function(self, event, ...)
+local spell_cast_success = function(self, event, ...)
     local unitID, spell, rank, lineID, spellID = ...
     if spellID == nil or spell == nil or rank == nil or lineID == nil then
         return
     end
-    if unitID == PlayerFrame.unit then 
-        for k,v in pairs(cfg.watch_spell) do
-            if v == spellID then
-                init_cell(v)
---                if cd_frame.frame == nil then
---                    local frame = CreateFrame("Button", "cool_down_fram", UIParent)
---                    local texture = frame:CreateTexture(spell .. "cd")
---                    texture:SetAllPoints("cool_down_fram")
---                    texture:SetAlpha(0.5)
---                    frame:SetWidth(40)
---                    frame:SetHeight(40)
---                    frame:ClearAllPoints()
---                    frame:SetPoint("CENTER", UIParent, "CENTER", 100, 0)
---                    frame:Show()
---                    cd_frame.spell_id = v
---                    cd_frame.frame = frame
---                    cd_frame.spell_name = spell
---                    cd_frame.texture = texture
---                    cd_frame.cd = nil
---                    cd_frame.expires = nil
---                end
+    for k,v in pairs(cfg.watch_spell) do
+        if v == spellID then
+            name, _, icon, _, _, duration, expires, _, _, _, _, _, _, _, _, _ = UnitBuff(unitID, spell)
+            if duration ~= nil then
+                buff_show(spellID, name, expires, icon)
             end
         end
     end
 end
 
-local up_buff_duration = function(self, event, ...)
-    local unit = ...
-    if unit ~= PlayerFrame.unit then
-        return
-    end
-    if cd_frame.spell_name == nil then
-        return
-    end
-    name, rank, icon, count, dispelType, duration, expires, caster, isStealable, shouldConsolidate, spellID, canApplyAura, isBossDebuff, value1, value2, value3 = UnitBuff(unit, cd_frame.spell_name)
-    if duration == nil then
-        --unshow(spellID)
---        cd_frame.frame:Hide()
---        cd_frame.spell_id = nil
---        cd_frame.frame = nil
---        cd_frame.spell_name = nil
---        cd_frame.cd = nil
---        cd_frame.expires = nil
-    else
-        --show(spellID, name, expires, icon)
---        local now, cd = GetTime(), nil
---        cd_frame.texture:SetTexture(icon)
---
---        if cd_frame.expires == expires then
---            return
---        end
---        cd_frame.expires = expires
---        if cd_frame.cd == nil then
---            local cd = CreateFrame("Cooldown", "centercooldown", cd_frame.frame, "CooldownFrameTemplate")
---            cd:SetCooldown(now, expires - now)
---            cd_frame.cd = cd
---        else
---            cd_frame.cd:SetCooldown(now, expires - now)
---        end
-
+local update_buff_duration = function(self, ...)
+    local cell = nil
+    local now = GetTime()
+    for k, v in pairs(CDFrame) do
+        if v.used == 1 then
+            cell = v
+             _, _, _, _, _, duration, expires, _, _, _, spellID, _, _, _, _, _ = UnitBuff(PlayerFrame.unit, cell.spell_name)
+             if duration == nil then
+                buff_hide(v.spell_id)
+            end
+        end
     end
 end
+
 
 create_all_buff_cells(CellConfig)
 
 buffs = CreateFrame("Frame")
---buffs:RegisterEvent("UNIT_AURA")
 buffs:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED")
---buffs:SetScript("OnUpdate", setposition)
-buffs:SetScript("OnEvent", get_spell_id)
+buffs:SetScript("OnEvent", spell_cast_success)
 
 local loss_or_gaint = CreateFrame("Frame")
 loss_or_gaint:RegisterEvent("UNIT_AURA")
-loss_or_gaint:SetScript("OnEvent", up_buff_duration)
-loss_or_gaint:SetScript("OnUpdate", up_buff_duration)
+loss_or_gaint:SetScript("OnEvent", update_buff_duration)
+
+

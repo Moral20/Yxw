@@ -24,4 +24,29 @@ cfg.watch_spell = {
     33763,
     2565,
     156321,
+    16870,
+}
+cfg.CellConfig = {
+    a1 = "CENTER", 
+    af = UIParent, 
+    a2 = "CENTER", 
+    x = 100, 
+    y = 0, 
+    alpha = 0.9,
+    cell_num = 10, 
+    offset = 50, 
+    width = 40, 
+    height = 40,
+}
+
+cfg.Cells = {
+    key = nil,
+    frame = nil,
+    texture = nil,
+    cd_frame = nil,
+    frame_name = nil,
+    spell_id = nil,
+    spell_name = nil,
+    expires = nil,
+    used = nil,
 }
