@@ -13,7 +13,7 @@ cfg.units = {
     },
     -- TARGET
     target = {
-        pos = { a1 = "TOP", a2 = "TOP", af = "UIParent", x = -325, y = -345 },
+        pos = { a1 = "TOP", a2 = "TOP", af = "UIParent", x = -325, y = -355 },
     },
 }
 
@@ -21,7 +21,7 @@ cfg.units = {
 cfg.watch_spell = {
     179244,
     17,
-    33763,
+--    33763, --生命绽放
     2565,
     156321,
     16870,

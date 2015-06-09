@@ -44,9 +44,9 @@ function getGender(unit)
         if gender == 1 then
             gender = ""
         elseif gender == 2 then
-            gender = "男"
+            gender = "M "
         else
-            gender = "女"
+            gender = "F "
         end
     end
 end
@@ -61,7 +61,7 @@ function getString(unit, hp)
     if hp > 0 then
         string = class .. " " .. race .. " %d%%"
     else
-        string = class .. " " .. race .. "0"
+        string = class .. " " .. race .. "Dead"
     end
     return string
 end
@@ -99,6 +99,10 @@ local healthUpdate = function(frame, event, unit)
     local threatvalue = getThreat(unit)
     local string = getString(unit, hp)
 
+    if yxwAddon[hp] ~= nil then
+        yxwAddon[hp]:SetFormattedText(hp)
+    end
+
     if hp > 0 then		
         local persent = hp / UnitHealthMax(unit) * 100
         yxwAddon[unit]:SetFormattedText(threatvalue .. string, persent)
@@ -109,6 +113,12 @@ local healthUpdate = function(frame, event, unit)
 --        end
     else
         yxwAddon[unit]:SetText(string)
+    end
+    if event == "PLAYER_TARGET_CHANGED" then
+        if PetFrame ~= nil then
+            PetFrame:ClearAllPoints()
+            PetFrame:SetPoint("LEFT", PlayerFrame, "RIGHT", 0, 0)
+        end
     end
 end
 
@@ -137,48 +147,48 @@ yxwAddon.target:SetJustifyH("LEFT")
 
 
 
-yxwAddon.focus = CreateFrame("Frame", "FocusPercent", FocusFrameHealthBar)
-yxwAddon.focus:SetPoint(pos, FocusFrame, pos, x, y)
-yxwAddon.focus:SetWidth(250)
-yxwAddon.focus:SetHeight(20)
-yxwAddon.focus:EnableMouse(true)
-yxwAddon.focus:RegisterForDrag("LeftButton")
-yxwAddon.focus:SetClampedToScreen(true)
-yxwAddon.focus:SetMovable(true)
-yxwAddon.focus:SetScript("OnDragStart", startDrag)
-yxwAddon.focus:SetScript("OnDragStop", stopDrag)
-yxwAddon.focus:SetScript("OnEvent", healthUpdate)
-yxwAddon.focus.unit = "focus"
-yxwAddon.focus:RegisterEvent("PLAYER_FOCUS_CHANGED")
-yxwAddon.focus:RegisterUnitEvent("UNIT_HEALTH_FREQUENT", "focus")
-yxwAddon.focus = yxwAddon.focus:CreateFontString("FocusPercentText", "OVERLAY")
-yxwAddon.focus:SetAllPoints("FocusPercent")
-yxwAddon.focus:SetFontObject(TextStatusBarText)
-yxwAddon.focus:SetJustifyH("LEFT")
-
-
-
-
-for i = 1, 5 do
-    local boss, Boss = ("boss%d"):format(i), ("Boss%d"):format(i)
-    yxwAddon[boss] = CreateFrame("Frame", Boss.."Percent", _G[Boss.."TargetFrameHealthBar"])
-    yxwAddon[boss]:SetPoint(pos, _G[Boss.."TargetFrameHealthBar"], pos, x, y)
-    yxwAddon[boss]:SetWidth(250)
-    yxwAddon[boss]:SetHeight(20)
-    yxwAddon[boss]:EnableMouse(true)
-    yxwAddon[boss]:RegisterForDrag("LeftButton")
-    yxwAddon[boss]:SetClampedToScreen(true)
-    yxwAddon[boss]:SetMovable(true)
-    yxwAddon[boss]:SetScript("OnDragStart", startDrag)
-    yxwAddon[boss]:SetScript("OnDragStop", stopDrag)
-    yxwAddon[boss]:SetScript("OnEvent", healthUpdate)
-    yxwAddon[boss]:SetScript("OnShow", healthUpdate)
-    yxwAddon[boss].unit = boss
-    yxwAddon[boss]:RegisterEvent("INSTANCE_ENCOUNTER_ENGAGE_UNIT")
-    yxwAddon[boss]:RegisterUnitEvent("UNIT_HEALTH_FREQUENT", boss)
-    yxwAddon[boss] = yxwAddon[boss]:CreateFontString(Boss.."PercentText", "OVERLAY")
-    yxwAddon[boss]:SetAllPoints(Boss.."Percent")
-    yxwAddon[boss]:SetFontObject(TextStatusBarText)
-    yxwAddon[boss]:SetJustifyH("RIGHT")
-end
+--yxwAddon.focus = CreateFrame("Frame", "FocusPercent", FocusFrameHealthBar)
+--yxwAddon.focus:SetPoint(pos, FocusFrame, pos, x, y)
+--yxwAddon.focus:SetWidth(250)
+--yxwAddon.focus:SetHeight(20)
+--yxwAddon.focus:EnableMouse(true)
+--yxwAddon.focus:RegisterForDrag("LeftButton")
+--yxwAddon.focus:SetClampedToScreen(true)
+--yxwAddon.focus:SetMovable(true)
+--yxwAddon.focus:SetScript("OnDragStart", startDrag)
+--yxwAddon.focus:SetScript("OnDragStop", stopDrag)
+--yxwAddon.focus:SetScript("OnEvent", healthUpdate)
+--yxwAddon.focus.unit = "focus"
+--yxwAddon.focus:RegisterEvent("PLAYER_FOCUS_CHANGED")
+--yxwAddon.focus:RegisterUnitEvent("UNIT_HEALTH_FREQUENT", "focus")
+--yxwAddon.focus = yxwAddon.focus:CreateFontString("FocusPercentText", "OVERLAY")
+--yxwAddon.focus:SetAllPoints("FocusPercent")
+--yxwAddon.focus:SetFontObject(TextStatusBarText)
+--yxwAddon.focus:SetJustifyH("LEFT")
+--
+--
+--
+--
+--for i = 1, 5 do
+--    local boss, Boss = ("boss%d"):format(i), ("Boss%d"):format(i)
+--    yxwAddon[boss] = CreateFrame("Frame", Boss.."Percent", _G[Boss.."TargetFrameHealthBar"])
+--    yxwAddon[boss]:SetPoint(pos, _G[Boss.."TargetFrameHealthBar"], pos, x, y)
+--    yxwAddon[boss]:SetWidth(250)
+--    yxwAddon[boss]:SetHeight(20)
+--    yxwAddon[boss]:EnableMouse(true)
+--    yxwAddon[boss]:RegisterForDrag("LeftButton")
+--    yxwAddon[boss]:SetClampedToScreen(true)
+--    yxwAddon[boss]:SetMovable(true)
+--    yxwAddon[boss]:SetScript("OnDragStart", startDrag)
+--    yxwAddon[boss]:SetScript("OnDragStop", stopDrag)
+--    yxwAddon[boss]:SetScript("OnEvent", healthUpdate)
+--    yxwAddon[boss]:SetScript("OnShow", healthUpdate)
+--    yxwAddon[boss].unit = boss
+--    yxwAddon[boss]:RegisterEvent("INSTANCE_ENCOUNTER_ENGAGE_UNIT")
+--    yxwAddon[boss]:RegisterUnitEvent("UNIT_HEALTH_FREQUENT", boss)
+--    yxwAddon[boss] = yxwAddon[boss]:CreateFontString(Boss.."PercentText", "OVERLAY")
+--    yxwAddon[boss]:SetAllPoints(Boss.."Percent")
+--    yxwAddon[boss]:SetFontObject(TextStatusBarText)
+--    yxwAddon[boss]:SetJustifyH("RIGHT")
+--end
 --END

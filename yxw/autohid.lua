@@ -112,6 +112,11 @@ function setpostion(frame)
     frame:SetScale(scale)
     --PlayerFrame:PlayerFrameBackground:Hide()
     frame:SetPoint(cfgPlayerPos.a1, cfgPlayerPos.af, cfgPlayerPos.a2, cfgPlayerPos.x, cfgPlayerPos.y)
+    local _, class = UnitClass("player")
+    if class == "PRIEST" then
+        PriestBarFrame:ClearAllPoints()
+        PriestBarFrame:SetPoint(cfgPlayerPos.a1, cfgPlayerPos.af, cfgPlayerPos.a2, cfgPlayerPos.x+50, cfgPlayerPos.y + 20)
+    end
 end
 
 function settargetpostion(frame)
