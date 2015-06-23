@@ -2,7 +2,7 @@
 local addon, ns = ...
 -- shift 右键, 添加为焦点目标
 
-local modifier = "shift" --- 可修改为 shift, alt 或者 ctrl 
+local modifier = "ctrl" --- 可修改为 shift, alt 或者 ctrl 
 local mouseButton = "2" --- 1 =鼠标左键, 2 = 鼠标右键, 3 = 鼠标滚轮按下, 4 and 5 = 高级鼠标……你们懂的 
 
 local function SetFocusHotkey(frame) 

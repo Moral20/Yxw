@@ -113,9 +113,16 @@ function setpostion(frame)
     --PlayerFrame:PlayerFrameBackground:Hide()
     frame:SetPoint(cfgPlayerPos.a1, cfgPlayerPos.af, cfgPlayerPos.a2, cfgPlayerPos.x, cfgPlayerPos.y)
     local _, class = UnitClass("player")
+    -- 这里应该用类似switch的东西,不过不会...
     if class == "PRIEST" then
         PriestBarFrame:ClearAllPoints()
         PriestBarFrame:SetPoint(cfgPlayerPos.a1, cfgPlayerPos.af, cfgPlayerPos.a2, cfgPlayerPos.x+50, cfgPlayerPos.y + 20)
+    end
+    if class == "MONK" then
+        MonkHarmonyBar:ClearAllPoints()
+        MonkHarmonyBar:SetPoint(cfgPlayerPos.a1, cfgPlayerPos.af, cfgPlayerPos.a2, cfgPlayerPos.x+50, cfgPlayerPos.y + 20)
+        MonkStaggerBar:ClearAllPoints()
+        MonkStaggerBar:SetPoint(cfgPlayerPos.a1, cfgPlayerPos.af, cfgPlayerPos.a2, cfgPlayerPos.x+50, cfgPlayerPos.y + 25)
     end
 end
 
