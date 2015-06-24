@@ -1,5 +1,6 @@
 local addon, ns = ...
 
+-- 低血量警告
 
 local cfg = ns.cfg
 
