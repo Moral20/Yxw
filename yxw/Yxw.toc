@@ -1,6 +1,4 @@
-## Interface: 60100
-## X-BigfootType: 1
-## X-BigfootDesc: 竞技场自带框体徽章显示
+## Interface: 60200
 ## Title: 杂七杂八的插件
 ## Notes: 杂七杂八的插件
 ## Author: Moral
@@ -17,4 +15,5 @@ focus.lua
 achivement.lua
 buff.lua
 hp.lua
+tp.lua
 
