@@ -101,11 +101,16 @@ local healthUpdate = function(frame, event, ...)
         hpFrameText:SetTextColor(yellow.r, yellow.g, yellow.b, 1)
         hpFrameText:SetText("Dead")
     end
+
 end
 
 TargetFrameTextureFrameHealthBarText:SetAlpha(0.7)
 TargetFrameTextureFrameManaBarText:SetAlpha(0.7)
 
+if PetFrame ~= nil then
+    PetFrame:ClearAllPoints()
+    PetFrame:SetPoint("LEFT", PlayerFrame, "RIGHT", 0, 0)
+end
 
 hpFrame = CreateFrame("Frame", "TargetPercent", TargetFrame)
 hpFrame:SetPoint(hp_pos.a1, hp_pos.af, hp_pos.a2, hp_pos.x, hp_pos.y)

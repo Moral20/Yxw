@@ -123,7 +123,8 @@ function setpostion(frame)
         MonkHarmonyBar:ClearAllPoints()
         MonkHarmonyBar:SetPoint(cfgPlayerPos.a1, cfgPlayerPos.af, cfgPlayerPos.a2, cfgPlayerPos.x+50, cfgPlayerPos.y + 20)
         MonkStaggerBar:ClearAllPoints()
-        MonkStaggerBar:SetPoint(cfgPlayerPos.a1, cfgPlayerPos.af, cfgPlayerPos.a2, cfgPlayerPos.x+50, cfgPlayerPos.y + 25)
+        MonkStaggerBar:SetPoint("CENTER", "UIParent", "CENTER", 0, -100)
+        --MonkStaggerBar:SetPoint(cfgPlayerPos.a1, cfgPlayerPos.af, cfgPlayerPos.a2, cfgPlayerPos.x+50, cfgPlayerPos.y + 25)
     end
 end
 
